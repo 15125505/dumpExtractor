@@ -58,8 +58,8 @@ BOOL CGetFileOfDump::Act(CString strDumpFile, CString strOutFolder)
 		}
 
 		// 保存当前内容并进行处理
-		//bufRead.append(buff, nRead);
-		//Process(bufRead);
+		bufRead.append(buff, nRead);
+		Process(bufRead);
 	}
 	fclose(pFile);
 
