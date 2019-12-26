@@ -61,7 +61,7 @@ UINT CGetFileOfDump::TH_Work(LPVOID lpContext)
 {
 	CGetFileOfDump *pThis = (CGetFileOfDump *)lpContext;
 	pThis->Work();
-	pThis->AddLog(1, "----任务结束！");
+	pThis->AddLog(1, "----任务结束！\r\n");
 	pThis->m_hThread = NULL;
 	return 0;
 }
