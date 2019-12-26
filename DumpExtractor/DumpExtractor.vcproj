@@ -194,6 +194,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\FileEx.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\GetFileOfDump.cpp"
 				>
 			</File>
@@ -229,6 +233,10 @@
 			</File>
 			<File
 				RelativePath=".\DumpExtractorDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\FileEx.h"
 				>
 			</File>
 			<File
