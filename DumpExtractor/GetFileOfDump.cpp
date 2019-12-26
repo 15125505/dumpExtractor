@@ -60,8 +60,11 @@ BOOL CGetFileOfDump::Act(CString strDumpFile, CString strOutFolder, CString strE
 UINT CGetFileOfDump::TH_Work(LPVOID lpContext)
 {
 	CGetFileOfDump *pThis = (CGetFileOfDump *)lpContext;
+	DWORD dwTick = GetTickCount();
 	pThis->Work();
-	pThis->AddLog(1, "----任务结束！\r\n");
+	CString str;
+	str.Format("----任务结束！\r\n    文件大小 - %.3f MB\r\n    导出文件 - %d 个\r\n    花费时间 - %.3f 秒\r\n", pThis->GetFileSize() / 1024.0 / 1024,  pThis->GetOutFileCount(), (GetTickCount() - dwTick) / 1000.0);
+	pThis->AddLog(1, str);
 	pThis->m_hThread = NULL;
 	return 0;
 }

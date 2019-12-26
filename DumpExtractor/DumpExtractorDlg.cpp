@@ -55,6 +55,67 @@ END_MESSAGE_MAP()
 CString g_InitFolder;
 
 
+void Test()
+{
+
+	// 读取文件
+	FILE *pFile = NULL;
+	fopen_s(&pFile, "D:\\terr.jpg", "rb");
+	if (NULL == pFile)
+	{
+		return;
+	}
+
+
+
+	while (1)
+	{
+		WORD wTag;
+		if (fread(&wTag, 1, 2, pFile) != 2)
+		{
+			break;
+		}
+		if (LOBYTE(wTag) != 0xFF)
+		{
+			// 文件错误
+			ASSERT(0);
+			break;
+		}
+		if (0xD8FF == wTag)
+		{
+			// 文件头
+			continue;
+		} 
+		else if (0xD9FF == wTag)
+		{
+			// 文件尾
+			continue;
+		} 
+		else
+		{
+			// 读取两个字节的文件长度
+			WORD wLen;
+			if (fread(&wLen, 1, 2, pFile) != 2)
+			{
+				ASSERT(0);
+				break;
+			}
+			wLen = htons(wLen);
+			if (wLen < 2)
+			{
+				ASSERT(0);
+				break;
+			}
+			fseek(pFile, wLen - 2, SEEK_CUR);
+			TRACE("-- %04X : %d\n", htons(wTag), wLen);
+		}
+	}
+
+	fclose(pFile);
+
+}
+
+
 CDumpExtractorDlg::CDumpExtractorDlg(CWnd* pParent /*=NULL*/)
 : CDialog(CDumpExtractorDlg::IDD, pParent)
 , m_nType(0)
@@ -62,8 +123,7 @@ CDumpExtractorDlg::CDumpExtractorDlg(CWnd* pParent /*=NULL*/)
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 	m_bWorking = FALSE;
 
-	// TODO:需要删除的测试代码
-	GetTmpFolder();
+	//Test();
 }
 
 void CDumpExtractorDlg::DoDataExchange(CDataExchange* pDX)
@@ -128,6 +188,7 @@ BOOL CDumpExtractorDlg::OnInitDialog()
 	m_nType = ReadCfg(FILE_TYPE, 0);
 	SetDlgItemText(IDC_DMP, ReadCfg(DMP_FILE, GetTmpFolder() + "chrome.DMP"));
 	SetDlgItemText(IDC_OUTPUT, ReadCfg(OUTPUT_FOLDER, Tool::CFileEx::GetExeDirectory().c_str() + CString("\\output")));
+	UpdateData(FALSE);
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
